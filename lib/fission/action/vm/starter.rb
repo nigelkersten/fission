@@ -58,10 +58,13 @@ module Fission
             end
           end
 
+          headless = options[:headless] unless options[:headless].blank?
+          headless ||= Fission.config['headless'] unless Fission.config['headless'].nil?
+
           command = "#{vmrun_cmd} start "
           command << "#{conf_file_response.data} "
 
-          command << (options[:headless].blank? ? 'gui ' : 'nogui ')
+          command << (headless ? 'nogui ' : 'gui ')
           command << '2>&1'
 
           command_exec = Fission::Action::ShellExecutor.new command
